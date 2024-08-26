@@ -1,20 +1,21 @@
 package com.example.myshoppinglist.presentation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myshoppinglist.R
-import com.example.myshoppinglist.domain.ShopItem
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var shopListAdapter : ShopListAdapter
+    private lateinit var addShopItemButton: FloatingActionButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -27,12 +28,20 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         observeViewModel()
+        setupAddShopItemButton()
+    }
+
+    private fun setupAddShopItemButton() {
+        addShopItemButton = findViewById(R.id.floatingActionButton)
+        addShopItemButton.setOnClickListener {
+                startActivity(ShopItemActivity.newIntent(this))
         }
+    }
 
 
     private fun observeViewModel(){
         viewModel.shopList.observe(this){
-            shopListAdapter.shopList = it
+            shopListAdapter.submitList(it)
         }
     }
     private fun setupRecyclerView() {
@@ -50,12 +59,42 @@ class MainActivity : AppCompatActivity() {
                     ShopListAdapter.VIEW_TYPE_DISABLED,
                     ShopListAdapter.MAX_POOL_SIZE
                 )
-            shopListAdapter.onShopItemLongClickListener = {
-                viewModel.changeShopItemState(it)
-            }
-            shopListAdapter.onShopItemClickListener = {
-                Log.d("MainActivity", "OnItemClick id: ${it.id}")
-            }
+            setupLongClickListener()
+            setupClickListener()
+            setupSwipeListener(recyclerViewShopList)
+        }
+    }
+
+    private fun setupSwipeListener(recyclerViewShopList: RecyclerView) {
+        val helper = ItemTouchHelper(
+            object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val position = viewHolder.adapterPosition
+                    val item = shopListAdapter.currentList[position]
+                    viewModel.removeShopItem(item)
+                }
+
+            })
+        helper.attachToRecyclerView(recyclerViewShopList)
+    }
+
+    private fun setupClickListener() {
+        shopListAdapter.onShopItemClickListener = {
+            startActivity(ShopItemActivity.newIntent(this, it.id))
+        }
+    }
+
+    private fun setupLongClickListener() {
+        shopListAdapter.onShopItemLongClickListener = {
+            viewModel.changeShopItemState(it)
         }
     }
 }
