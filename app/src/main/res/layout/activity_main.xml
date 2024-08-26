@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".presentation.MainActivity">
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/shopListRecyclerView"
         android:layout_width="0dp"
@@ -18,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/shop_list_item_active"/>
+        tools:listitem="@layout/shop_list_item_enabled"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
