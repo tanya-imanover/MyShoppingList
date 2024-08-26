@@ -10,7 +10,9 @@ import com.example.myshoppinglist.domain.ShopItem
 
 class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>() {
 
-    var onShopItemLongClickListener: OnShopItemLongClickListener? = null
+    var onShopItemLongClickListener: ((ShopItem) -> Unit)? = null
+    var onShopItemClickListener: ((ShopItem) -> Unit)? = null
+
     var shopList = listOf<ShopItem>()
         set(value) {
             field = value
@@ -38,8 +40,11 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>
         holder.tvName.text = shopItem.name
         holder.tvCount.text = shopItem.count.toString()
         holder.itemView.setOnLongClickListener {
-            onShopItemLongClickListener?.onShopItemLongClick(shopItem)
+            onShopItemLongClickListener?.invoke(shopItem)
             true
+        }
+        holder.itemView.setOnClickListener {
+            onShopItemClickListener?.invoke(shopItem)
         }
 
     }
@@ -51,10 +56,6 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>
         } else {
             VIEW_TYPE_DISABLED
         }
-    }
-
-    interface OnShopItemLongClickListener{
-        fun onShopItemLongClick(shopItem: ShopItem)
     }
 
     class ShopItemViewHolder(view: View): RecyclerView.ViewHolder(view){

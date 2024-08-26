@@ -1,6 +1,7 @@
 package com.example.myshoppinglist.presentation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -39,22 +40,22 @@ class MainActivity : AppCompatActivity() {
         with(recyclerViewShopList) {
             shopListAdapter = ShopListAdapter()
             adapter = shopListAdapter
-            recyclerViewShopList.recycledViewPool
+            recycledViewPool
                 .setMaxRecycledViews(
                     ShopListAdapter.VIEW_TYPE_ENABLED,
                     ShopListAdapter.MAX_POOL_SIZE
                 )
-            recyclerViewShopList.recycledViewPool
+            recycledViewPool
                 .setMaxRecycledViews(
                     ShopListAdapter.VIEW_TYPE_DISABLED,
                     ShopListAdapter.MAX_POOL_SIZE
                 )
-            shopListAdapter.onShopItemLongClickListener =
-                object : ShopListAdapter.OnShopItemLongClickListener {
-                    override fun onShopItemLongClick(shopItem: ShopItem) {
-                        viewModel.changeShopItemState(shopItem)
-                    }
-                }
+            shopListAdapter.onShopItemLongClickListener = {
+                viewModel.changeShopItemState(it)
+            }
+            shopListAdapter.onShopItemClickListener = {
+                Log.d("MainActivity", "OnItemClick id: ${it.id}")
+            }
         }
     }
 }
