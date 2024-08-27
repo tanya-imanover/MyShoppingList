@@ -1,7 +1,5 @@
 package com.example.myshoppinglist.presentation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myshoppinglist.data.ShopListRepositoryImpl
 import com.example.myshoppinglist.domain.EditShopItemUseCase
@@ -26,7 +24,6 @@ class MainViewModel : ViewModel() {
 
     fun changeShopItemState(shopItem: ShopItem){
         editShopItemUseCase.editShopItem(shopItem.copy(enabled = !shopItem.enabled))
-
     }
 
 

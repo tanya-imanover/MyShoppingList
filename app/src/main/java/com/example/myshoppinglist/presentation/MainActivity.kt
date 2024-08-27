@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupAddShopItemButton() {
         addShopItemButton = findViewById(R.id.floatingActionButton)
         addShopItemButton.setOnClickListener {
-                startActivity(ShopItemActivity.newIntent(this))
+                startActivity(ShopItemActivity.newIntentAddItem(this))
         }
     }
 
@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupClickListener() {
         shopListAdapter.onShopItemClickListener = {
-            startActivity(ShopItemActivity.newIntent(this, it.id))
+            startActivity(ShopItemActivity.newIntentEditItem(this, it.id))
         }
     }
 
