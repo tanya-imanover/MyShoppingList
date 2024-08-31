@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MyShoppingList</string>
+    <string name="add_new_item_into_shop_list_button">Add new item into shop list button</string>
+    <string name="name_tv_hint">Name</string>
+    <string name="count_tv_hint">Count</string>
+    <string name="save_btn_title">Save</string>
+    <string name="error_input_name">Name is incorrect</string>
+    <string name="error_input_count">Count is incorrect</string>
 </resources>
